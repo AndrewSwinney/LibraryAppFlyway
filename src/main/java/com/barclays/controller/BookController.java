@@ -1,0 +1,48 @@
+package com.barclays.controller;
+
+import com.barclays.model.Book;
+import com.barclays.service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    private final BookService bookService;
+
+    @Autowired
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        Book createdBook = bookService.createBook(book);
+        return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public List<Book> getAllBooks(@RequestParam(required = false) String filter,
+                                  @RequestParam(required = false) String author,
+                                  @RequestParam(required = false) String genre) {
+        if (filter != null && !filter.isEmpty()) {
+            return bookService.findByTitleContains(filter);
+        } else if (author != null && !author.isEmpty()) {
+            return bookService.findByAuthorContains(author);
+        } else if (genre != null && !genre.isEmpty()) {
+            return bookService.findByGenreContains(genre);
+        }
+        return bookService.findAllBooks();
+    }
+
+    @GetMapping("/{id}")
+    public Book getBook(@PathVariable int id) {
+        return bookService.findByBookId(id);
+    }
+}
+
