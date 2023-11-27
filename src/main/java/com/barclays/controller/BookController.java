@@ -1,6 +1,7 @@
 package com.barclays.controller;
 
 import com.barclays.model.Book;
+import com.barclays.model.Movie;
 import com.barclays.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,16 @@ public class BookController {
     @GetMapping("/{id}")
     public Book getBook(@PathVariable int id) {
         return bookService.findByBookId(id);
+    }
+
+    @PutMapping
+    public Book updateBook(@RequestBody Book book){
+        return bookService.save(book);
+    }
+
+    @DeleteMapping
+    public void deleteByBook(@RequestBody Book book){
+        bookService.delete(book);
     }
 }
 

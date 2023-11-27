@@ -1,6 +1,7 @@
 package com.barclays.controller;
 
 import com.barclays.model.Member;
+import com.barclays.model.Movie;
 import com.barclays.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,16 @@ public class MemberController {
     @GetMapping("/{id}")
     public Member getMember(@PathVariable int id) {
         return memberService.findById(id);
+    }
+
+    @PutMapping
+    public Member updateMember(@RequestBody Member member){
+        return memberService.save(member);
+    }
+
+    @DeleteMapping
+    public void deleteByMember(@RequestBody Member member){
+        memberService.delete(member);
     }
 }
 

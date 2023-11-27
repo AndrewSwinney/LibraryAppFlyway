@@ -2,6 +2,7 @@ package com.barclays.service;
 
 
 import com.barclays.model.Member;
+import com.barclays.model.Movie;
 import com.barclays.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> findByEmailAddressContains(String emailAddress) {
         return memberRepository.findByEmailAddressContains(emailAddress);
+    }
+
+    public void delete(Member member) {
+        memberRepository.delete(member);
+    }
+
+    @Override
+    public Member save(Member m){
+        return memberRepository.save(m);
     }
 }

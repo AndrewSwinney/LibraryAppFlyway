@@ -17,5 +17,8 @@ public interface MovieService {
 
     List<Movie> findByGenreContains(String genre);
 
+    void delete(Movie movie);
 
+    public Movie save(Movie m);
 }
+

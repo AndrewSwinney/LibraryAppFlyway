@@ -45,4 +45,13 @@ public class MovieServiceImpl implements MovieService {
     public List<Movie> findByGenreContains(String genre) {
         return movieRepository.findByGenreContains(genre);
     }
+
+    public void delete(Movie movie) {
+        movieRepository.delete(movie);
+    }
+
+    @Override
+    public Movie save(Movie m){
+        return movieRepository.save(m);
+    }
 }
