@@ -1,5 +1,7 @@
 package com.barclays.controller;
 
+import com.barclays.model.Book;
+import com.barclays.model.Member;
 import com.barclays.model.Movie;
 import com.barclays.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,11 @@ public class MovieController {
         return new ResponseEntity<>(createdMovie, HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public Movie updateMovie(@RequestBody Movie movie) {
+        return movieService.save(movie);
+    }
+
     @GetMapping
     public List<Movie> getAllMovies(@RequestParam(required = false) String filter,
                                     @RequestParam(required = false) String genre) {
@@ -40,6 +47,11 @@ public class MovieController {
     @GetMapping("/{id}")
     public Movie getMovie(@PathVariable int id) {
         return movieService.findByMovieId(id);
+    }
+
+    @DeleteMapping
+    public void deleteByMovie(@RequestBody Movie movie){
+        movieService.delete(movie);
     }
 }
 

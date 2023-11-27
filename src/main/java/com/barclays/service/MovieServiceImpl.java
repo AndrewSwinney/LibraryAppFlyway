@@ -1,6 +1,7 @@
 package com.barclays.service;
 
 import com.barclays.model.Book;
+import com.barclays.model.Member;
 import com.barclays.model.Movie;
 import com.barclays.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +46,14 @@ public class MovieServiceImpl implements MovieService {
     public List<Movie> findByGenreContains(String genre) {
         return movieRepository.findByGenreContains(genre);
     }
+
+    @Override
+    public Movie save(Movie m){
+        return movieRepository.save(m);
+    }
+
+    public void delete(Movie movie) {
+        movieRepository.delete(movie);
+    }
 }
+

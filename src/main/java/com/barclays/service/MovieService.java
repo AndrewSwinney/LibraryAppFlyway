@@ -1,5 +1,6 @@
 package com.barclays.service;
 
+import com.barclays.model.Book;
 import com.barclays.model.Movie;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,10 @@ public interface MovieService {
     List<Movie> findByMovieTitleContains(String filter);
 
     List<Movie> findByGenreContains(String genre);
+
+    Movie save(Movie m);
+
+    void delete(Movie movie);
 
 
 }

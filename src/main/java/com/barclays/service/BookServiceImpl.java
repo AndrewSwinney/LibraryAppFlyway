@@ -1,6 +1,7 @@
 package com.barclays.service;
 
 import com.barclays.model.Book;
+import com.barclays.model.Member;
 import com.barclays.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findByGenreContains(String genre) {
         return bookRepository.findByGenreContains(genre);
+    }
+
+    @Override
+    public Book save(Book b){
+        return bookRepository.save(b);
+    }
+
+    public void delete(Book book) {
+        bookRepository.delete(book);
     }
 }
