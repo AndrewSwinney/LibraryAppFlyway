@@ -1,8 +1,8 @@
 package com.barclays.controller;
 
 import com.barclays.model.Book;
-import com.barclays.model.Movie;
 import com.barclays.service.BookService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getAllBooks(@RequestParam(required = false) String filter,
-                                  @RequestParam(required = false) String author,
-                                  @RequestParam(required = false) String genre) {
+    public List<Book> getAllBooks(@PathParam("filter") String filter,
+                                  @PathParam("author") String author,
+                                  @PathParam("genre") String genre) {
         if (filter != null && !filter.isEmpty()) {
             return bookService.findByTitleContains(filter);
         } else if (author != null && !author.isEmpty()) {

@@ -1,8 +1,12 @@
 package com.barclays.controller;
 
+import com.barclays.model.Book;
 import com.barclays.model.Member;
-import com.barclays.model.Movie;
 import com.barclays.service.MemberService;
+import jakarta.websocket.server.PathParam;
+import org.hibernate.mapping.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,8 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -28,8 +34,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public List<Member> getAllMembers(@RequestParam(required = false) String filter,
-                                      @RequestParam(required = false) String emailAddress) {
+    public List<Member> getAllMembers(@PathParam("filter") String filter,
+                                      @PathParam("emailAddress") String emailAddress) {
         if (filter != null && !filter.isEmpty()) {
             return memberService.findByNameContains(filter);
         } else if (emailAddress != null && !emailAddress.isEmpty()) {
@@ -37,6 +43,13 @@ public class MemberController {
         }
         return memberService.findAll();
     }
+
+    @GetMapping("/with-books")
+    public ResponseEntity<List<Member>> getAllMembersWithBooks() {
+        List<Member> membersWithBooks = memberService.findAllMembersWithBooks();
+        return ResponseEntity.ok(membersWithBooks);
+    }
+
 
     @GetMapping("/{id}")
     public Member getMember(@PathVariable int id) {

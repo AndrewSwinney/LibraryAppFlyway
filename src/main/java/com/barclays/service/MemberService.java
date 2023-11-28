@@ -1,5 +1,6 @@
 package com.barclays.service;
 
+import com.barclays.model.Book;
 import com.barclays.model.Member;
 import com.barclays.model.Movie;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,16 @@ public interface MemberService {
 
    Member findById(int id);
 
+
    List<Member> findByNameContains(String filter);
 
    List<Member> findByEmailAddressContains(String emailAddress);
 
    void delete(Member member);
 
-   public Member save(Member member);
+   List<Member> findAllMembersWithBooks();
+
+   Member save(Member member);
+
+
 }

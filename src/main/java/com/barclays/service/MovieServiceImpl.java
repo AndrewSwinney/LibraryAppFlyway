@@ -31,7 +31,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie findByMovieId(int id) {
+    public Movie findByMovieId(long id) {
         Optional<Movie> movies = movieRepository.findById((long) id);
         return movies.orElseGet(() -> new Movie("Default Member: Nothing found"));
     }

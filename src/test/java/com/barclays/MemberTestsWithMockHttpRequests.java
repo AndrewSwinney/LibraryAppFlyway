@@ -1,8 +1,11 @@
 package com.barclays;
 
+import com.barclays.model.Book;
 import com.barclays.model.Member;
+import com.barclays.model.Movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,11 +18,17 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -59,6 +68,74 @@ public class MemberTestsWithMockHttpRequests {
     }
 
     @Test
+        void testGettingMemberByFilteringName() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        int expectedLength = 1;
+
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members?filter=Andrew")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+        Member[] members = mapper.readValue(contentAsString, Member[].class);
+
+        assertAll("Testing members endpoint",
+                () -> assertEquals(expectedLength, members.length),
+                () -> assertEquals("Andrew", members[0].getName()));
+    }
+
+    @Test
+    void testGettingMemberByFilteringByEmail() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        int expectedLength = 1;
+
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members?emailAddress=andrews@email.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+        Member[] members = mapper.readValue(contentAsString, Member[].class);
+
+        assertAll("Testing members endpoint",
+                () -> assertEquals(expectedLength, members.length),
+                () -> assertEquals("andrews@email.com", members[0].getEmailAddress()));
+    }
+
+    @Test
+    void testGettingMemberByFilteringByMemberId() throws Exception {
+
+
+        int expectedLength = 1;
+
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/37")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+
+        List<String> members = new ArrayList<>();
+
+        members.add(contentAsString);
+
+        assertAll("Testing members endpoint",
+                () -> assertEquals(expectedLength, members.size()));
+    }
+
+
+    @Test
     @Rollback
     public void testCreateMember() throws Exception {
 
@@ -84,6 +161,74 @@ public class MemberTestsWithMockHttpRequests {
         member = mapper.readValue(contentAsString, Member.class);
 
         assertEquals("Luke", member.getName());
+    }
+
+    @Test
+    @Rollback
+    public void testUpdateMember() throws Exception {
+
+
+        ObjectMapper mapper;
+
+
+        Member member = new Member();
+        member.setId(37);
+        member.setName("Pete");
+        member.setEmailAddress("pete@email.com");
+
+
+        mapper = new ObjectMapper();
+
+        resultActions = this.mockMvc.perform(MockMvcRequestBuilders.put("/members")
+                        .content(mapper.writeValueAsString(member))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+        member = mapper.readValue(contentAsString, Member.class);
+
+        assertEquals("Pete", member.getName());
+    }
+
+    @Test
+    @Rollback
+    public void testDeleteMember() throws Exception {
+
+
+
+        ObjectMapper mapper;
+        mapper = new ObjectMapper();
+
+
+
+        Member member = new Member();
+        member.setId(37);
+        member.setName("Pete");
+        member.setEmailAddress("pete@email.com");
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/members")
+                        .content(mapper.writeValueAsString(member))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        resultActions =  this.mockMvc.perform(MockMvcRequestBuilders.delete("/members")
+                        .content(mapper.writeValueAsString(member))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        MvcResult result = resultActions.andReturn();
+
+        String contentAsString = result.getResponse().getContentAsString();
+
+        System.out.println("Content as string" + contentAsString);
+
+        Assertions.assertTrue(contentAsString.equals(""));
     }
 
 }

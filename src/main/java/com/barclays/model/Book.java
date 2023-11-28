@@ -23,7 +23,7 @@ public class Book {
             initialValue = 1,
             allocationSize = 1)
 
-    private int id;
+    private Long id;
 
     private int isbn;
 

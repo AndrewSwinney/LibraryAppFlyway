@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book findByBookId(int id) {
+    public Book findByBookId(long id) {
         Optional<Book> book = bookRepository.findById((long) id);
         return book.orElseGet(() -> new Book("Default Message: Nothing found"));
     }

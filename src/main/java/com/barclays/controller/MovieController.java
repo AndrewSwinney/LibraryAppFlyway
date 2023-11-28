@@ -2,6 +2,7 @@ package com.barclays.controller;
 
 import com.barclays.model.Movie;
 import com.barclays.service.MovieService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,8 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getAllMovies(@RequestParam(required = false) String filter,
-                                    @RequestParam(required = false) String genre) {
+    public List<Movie> getAllMovies(@PathParam("filter") String filter,
+                                    @PathParam("genre") String genre) {
         if (filter != null && !filter.isEmpty()) {
             return movieService.findByMovieTitleContains(filter);
         } else if (genre != null && !genre.isEmpty()) {
@@ -38,7 +39,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Movie getMovie(@PathVariable int id) {
+    public Movie getMovie(@PathVariable long id) {
         return movieService.findByMovieId(id);
     }
 

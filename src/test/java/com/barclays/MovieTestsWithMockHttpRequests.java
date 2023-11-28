@@ -1,9 +1,9 @@
 package com.barclays;
 
-import com.barclays.model.Book;
 import com.barclays.model.Movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -27,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @TestPropertySource(properties = {"spring.sql.init.mode=never"})
 @Transactional
+
+
 public class MovieTestsWithMockHttpRequests {
 
     @Autowired
@@ -89,6 +92,77 @@ public class MovieTestsWithMockHttpRequests {
         movie = mapper.readValue(contentAsString, Movie.class);
 
         assertEquals("Harry Potter and The Chamber of Secrets", movie.getTitle());
+    }
+
+    @Test
+    @Rollback
+    public void testUpdateMovie() throws Exception {
+
+
+        ObjectMapper mapper;
+
+
+        Movie movie = new Movie();
+        movie.setId(2);
+        movie.setTitle("Harry Potter and The Chamber");
+        movie.setDirector("JK Rowling");
+        movie.setGenre("Fantasy");
+        movie.setReleaseYear(2007);
+
+
+        mapper = new ObjectMapper();
+
+        resultActions = this.mockMvc.perform(MockMvcRequestBuilders.put("/movies")
+                        .content(mapper.writeValueAsString(movie))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+        movie = mapper.readValue(contentAsString, Movie.class);
+
+        assertEquals("Harry Potter and The Chamber", movie.getTitle());
+    }
+
+    @Test
+    @Rollback
+    public void testDeleteMovie() throws Exception {
+
+
+
+        ObjectMapper mapper;
+        mapper = new ObjectMapper();
+
+
+        Movie movie = new Movie();
+        movie.setId(2);
+        movie.setTitle("Harry Potter and The Chamber");
+        movie.setDirector("JK Rowling");
+        movie.setGenre("Fantasy");
+        movie.setReleaseYear(2007);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/movies")
+                        .content(mapper.writeValueAsString(movie))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        resultActions =  this.mockMvc.perform(MockMvcRequestBuilders.delete("/movies")
+                        .content(mapper.writeValueAsString(movie))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        MvcResult result = resultActions.andReturn();
+
+        String contentAsString = result.getResponse().getContentAsString();
+
+        System.out.println("Content as string" + contentAsString);
+
+        Assertions.assertTrue(contentAsString.equals(""));
     }
 
 

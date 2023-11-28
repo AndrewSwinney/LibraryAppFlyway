@@ -11,7 +11,7 @@ public interface MovieService {
 
     List<Movie> findAllMovies();
 
-    Movie findByMovieId(int id);
+    Movie findByMovieId(long id);
 
     List<Movie> findByMovieTitleContains(String filter);
 

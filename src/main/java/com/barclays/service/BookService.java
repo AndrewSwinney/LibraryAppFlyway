@@ -13,7 +13,7 @@ public interface BookService {
 
     List<Book> findAllBooks();
 
-    Book findByBookId(int id);
+    Book findByBookId(long id);
 
     List<Book> findByTitleContains(String filter);
 
@@ -24,5 +24,6 @@ public interface BookService {
     void delete(Book book);
 
     public Book save(Book book);
+
 }
 

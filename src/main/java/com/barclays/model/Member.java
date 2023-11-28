@@ -22,7 +22,7 @@ public class Member {
             allocationSize = 1
     )
 
-    private int id;
+    private Long id;
     private String name;
 
     private String emailAddress;

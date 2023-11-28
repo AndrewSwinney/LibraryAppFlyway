@@ -20,7 +20,7 @@ public class Movie {
             allocationSize = 1
     )
 
-    private int id;
+    private Long id;
     private String title;
     private String leadActor;
     private String director;
