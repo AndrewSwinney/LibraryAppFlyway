@@ -19,7 +19,7 @@ public class BookControllerIntegrationTests {
     @Test
     public void testGetAllBooks() {
         List<Book> books = bookController.getAllBooks("", "", "");
-        assertEquals(5, books.size());
+        assertEquals(8, books.size());
     }
 
     @Test
@@ -31,7 +31,13 @@ public class BookControllerIntegrationTests {
     @Test
     void testFilterBookByGenre() {
         List<Book> books = bookController.getAllBooks("", "", "Romance");
-        assertEquals(1, books.size());
+        assertEquals(2, books.size());
+    }
+
+    @Test
+    void testBookConstructorWithTitle(){
+        Book book = new Book("Rich Dad Poor Dad");
+        assertEquals("Rich Dad Poor Dad", book.getTitle());
     }
 
     @Test

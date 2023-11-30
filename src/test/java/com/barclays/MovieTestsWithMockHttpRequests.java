@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@SuppressWarnings("All")
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -41,7 +41,7 @@ public class MovieTestsWithMockHttpRequests {
     @Test
     void testGettingAllMembers() throws Exception {
 
-        int expectedLength = 8;
+        int expectedLength = 9;
 
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/movies")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,11 +55,11 @@ public class MovieTestsWithMockHttpRequests {
 
         assertAll("Testing movies endpoint",
                 () -> assertEquals(expectedLength, movies.length),
-                () -> assertEquals("Titanic", movies[1].getTitle()),
-                () -> assertEquals("Goodfellas", movies[2].getTitle()),
-                () -> assertEquals("Robert De Niro", movies[3].getLeadActor()),
-                () -> assertEquals(1983, movies[4].getReleaseYear()),
-                () -> assertEquals(8.3, movies[5].getRating()));
+                () -> assertEquals("Goodfellas", movies[1].getTitle()),
+                () -> assertEquals("Casino", movies[2].getTitle()),
+                () -> assertEquals("Al Pacino", movies[3].getLeadActor()),
+                () -> assertEquals(1997, movies[4].getReleaseYear()),
+                () -> assertEquals(7.4, movies[5].getRating()));
 
     }
 
@@ -103,7 +103,6 @@ public class MovieTestsWithMockHttpRequests {
 
 
         Movie movie = new Movie();
-        movie.setId(2);
         movie.setTitle("Harry Potter and The Chamber");
         movie.setDirector("JK Rowling");
         movie.setGenre("Fantasy");
@@ -137,7 +136,6 @@ public class MovieTestsWithMockHttpRequests {
 
 
         Movie movie = new Movie();
-        movie.setId(2);
         movie.setTitle("Harry Potter and The Chamber");
         movie.setDirector("JK Rowling");
         movie.setGenre("Fantasy");

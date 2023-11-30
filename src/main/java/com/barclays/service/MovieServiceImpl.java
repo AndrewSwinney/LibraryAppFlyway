@@ -1,6 +1,5 @@
 package com.barclays.service;
 
-import com.barclays.model.Book;
 import com.barclays.model.Movie;
 import com.barclays.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;

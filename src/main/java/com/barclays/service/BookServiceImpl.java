@@ -24,6 +24,7 @@ public class BookServiceImpl implements BookService {
     }
 
 
+    // method to find all books in book repository
     @Override
     public List<Book> findAllBooks() {
         List<Book> books = new ArrayList<>();
@@ -31,11 +32,14 @@ public class BookServiceImpl implements BookService {
         return books;
     }
 
+
+    // method to find a book by id from the book repository
     @Override
     public Book findByBookId(long id) {
         Optional<Book> book = bookRepository.findById((long) id);
         return book.orElseGet(() -> new Book("Default Message: Nothing found"));
     }
+
 
     @Override
     public List<Book> findByTitleContains(String filter) {

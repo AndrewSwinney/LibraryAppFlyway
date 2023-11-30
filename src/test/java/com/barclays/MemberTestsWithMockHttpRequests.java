@@ -1,8 +1,6 @@
 package com.barclays;
 
-import com.barclays.model.Book;
 import com.barclays.model.Member;
-import com.barclays.model.Movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
@@ -11,18 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +44,7 @@ public class MemberTestsWithMockHttpRequests {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        int expectedLength = 13;
+        int expectedLength = 17;
 
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -172,7 +167,7 @@ public class MemberTestsWithMockHttpRequests {
 
 
         Member member = new Member();
-        member.setId(37);
+        member.setId(37L);
         member.setName("Pete");
         member.setEmailAddress("pete@email.com");
 
@@ -205,7 +200,7 @@ public class MemberTestsWithMockHttpRequests {
 
 
         Member member = new Member();
-        member.setId(37);
+        member.setId(37L);
         member.setName("Pete");
         member.setEmailAddress("pete@email.com");
 
@@ -229,6 +224,55 @@ public class MemberTestsWithMockHttpRequests {
         System.out.println("Content as string" + contentAsString);
 
         Assertions.assertTrue(contentAsString.equals(""));
+    }
+
+    @Test
+    void testGettingMembersWithBooks() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        int expectedLength = 2;
+
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/with-books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+        Member[] members = mapper.readValue(contentAsString, Member[].class);
+
+        assertAll("Testing get members with books endpoint",
+                () -> assertEquals(expectedLength, members.length));
+    }
+
+    @Test
+    void testGettingMembersWithMovies() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        int expectedLength = 1;
+
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/with-movies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult result = resultActions.andReturn();
+        String contentAsString = result.getResponse().getContentAsString();
+
+        Member[] members = mapper.readValue(contentAsString, Member[].class);
+
+        assertAll("Testing get members with movies endpoint",
+                () -> assertEquals(expectedLength, members.length));
+    }
+
+    @Test
+    void memberAllArgsConstructorTest(){
+        Member member = new Member("Andrew", "andrew@email.com");
+        assertEquals("Andrew", member.getName());
+        assertEquals("andrew@email.com", member.getEmailAddress());
     }
 
 }

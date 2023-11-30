@@ -45,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findById(int id) {
         Optional<Member> member = memberRepository.findById((long) id);
-        return member.orElseGet(() -> new Member("Default Member: Nothing found"));
+        return member.orElseGet(() -> new Member("Default Member: Nothing found", ""));
     }
 
     @Override
@@ -72,6 +72,9 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> findAllMembersWithBooks() {
         return memberRepository.findAllMembersWithBooks();
     }
-
+    @Override
+    public List<Member> findAllMembersWithMovies() {
+        return memberRepository.findAllMembersWithMovies();
+    }
 
 }
