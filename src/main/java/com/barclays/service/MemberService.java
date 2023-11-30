@@ -29,4 +29,8 @@ public interface MemberService {
 
    List<Member> findAllMembersWithMovies();
 
+   void assignBookToMember(Long memberId, Long bookId);
+
+   void assignMovieToMember(Long memberId, Long movieId);
+
 }

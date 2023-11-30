@@ -3,7 +3,6 @@ package com.barclays;
 import com.barclays.model.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,8 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -31,12 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {"spring.sql.init.mode=never"})
 
 @Transactional
-public class MemberTestsWithMockHttpRequests {
+class MemberTestsWithMockHttpRequests {
 
     @Autowired
     MockMvc mockMvc;
     ResultActions resultActions;
-
 
 
     @Test
@@ -49,7 +46,7 @@ public class MemberTestsWithMockHttpRequests {
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
@@ -63,7 +60,7 @@ public class MemberTestsWithMockHttpRequests {
     }
 
     @Test
-        void testGettingMemberByFilteringName() throws Exception {
+    void testGettingMemberByFilteringName() throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -115,7 +112,7 @@ public class MemberTestsWithMockHttpRequests {
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/37")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
@@ -132,7 +129,7 @@ public class MemberTestsWithMockHttpRequests {
 
     @Test
     @Rollback
-    public void testCreateMember() throws Exception {
+     void testCreateMember() throws Exception {
 
 
         ObjectMapper mapper;
@@ -160,7 +157,7 @@ public class MemberTestsWithMockHttpRequests {
 
     @Test
     @Rollback
-    public void testUpdateMember() throws Exception {
+     void testUpdateMember() throws Exception {
 
 
         ObjectMapper mapper;
@@ -190,13 +187,11 @@ public class MemberTestsWithMockHttpRequests {
 
     @Test
     @Rollback
-    public void testDeleteMember() throws Exception {
-
+     void testDeleteMember() throws Exception {
 
 
         ObjectMapper mapper;
         mapper = new ObjectMapper();
-
 
 
         Member member = new Member();
@@ -210,7 +205,7 @@ public class MemberTestsWithMockHttpRequests {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
-        resultActions =  this.mockMvc.perform(MockMvcRequestBuilders.delete("/members")
+        resultActions = this.mockMvc.perform(MockMvcRequestBuilders.delete("/members")
                         .content(mapper.writeValueAsString(member))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -223,7 +218,7 @@ public class MemberTestsWithMockHttpRequests {
 
         System.out.println("Content as string" + contentAsString);
 
-        Assertions.assertTrue(contentAsString.equals(""));
+        assertTrue(contentAsString.equals(""));
     }
 
     @Test
@@ -231,7 +226,8 @@ public class MemberTestsWithMockHttpRequests {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        int expectedLength = 2;
+        int expectedLength = 4;
+
 
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/with-books")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -252,7 +248,7 @@ public class MemberTestsWithMockHttpRequests {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        int expectedLength = 1;
+        int expectedLength = 3;
 
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/with-movies")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -269,10 +265,34 @@ public class MemberTestsWithMockHttpRequests {
     }
 
     @Test
-    void memberAllArgsConstructorTest(){
+    void memberAllArgsConstructorTest() {
         Member member = new Member("Andrew", "andrew@email.com");
         assertEquals("Andrew", member.getName());
         assertEquals("andrew@email.com", member.getEmailAddress());
     }
 
+    @Test
+    @Rollback
+     void testAssignBookToMember() throws Exception {
+        long memberId = 43L;
+        long bookId = 1L;
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/members/" + memberId + "/books/" + bookId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Rollback
+     void testAssignMovieToMember() throws Exception {
+        long memberId = 43L;
+        long movieId = 4L;
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/members/" + memberId + "/movies/" + movieId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+    }
 }
