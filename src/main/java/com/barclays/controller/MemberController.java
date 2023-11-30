@@ -1,10 +1,8 @@
 package com.barclays.controller;
 
-import com.barclays.model.Book;
 import com.barclays.model.Member;
 import com.barclays.service.MemberService;
 import jakarta.websocket.server.PathParam;
-import org.hibernate.mapping.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +18,23 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
+
+    // POST endpoint to create members
     @PostMapping
     public ResponseEntity<Member> addMember(@RequestBody Member member) {
         Member createdMember = memberService.createMember(member);
         return new ResponseEntity<>(createdMember, HttpStatus.CREATED);
     }
 
+
+    // GET endpoint to retrieve all members, members can be filtered by name and emailAddress
     @GetMapping
     public List<Member> getAllMembers(@PathParam("filter") String filter,
                                       @PathParam("emailAddress") String emailAddress) {
@@ -44,6 +46,8 @@ public class MemberController {
         return memberService.findAll();
     }
 
+
+    // GET endpoint to retrieve all members with a book
     @GetMapping("/with-books")
     public ResponseEntity<List<Member>> getAllMembersWithBooks() {
         List<Member> membersWithBooks = memberService.findAllMembersWithBooks();
@@ -51,16 +55,29 @@ public class MemberController {
     }
 
 
+    // GET endpoint to retrieve all members with a movie
+    @GetMapping("/with-movies")
+    public ResponseEntity<List<Member>> getAllMembersWithMovies() {
+        List<Member> membersWithMovies = memberService.findAllMembersWithMovies();
+        return ResponseEntity.ok(membersWithMovies);
+    }
+
+
+    // GET endpoint to get members by their ID
     @GetMapping("/{id}")
     public Member getMember(@PathVariable int id) {
         return memberService.findById(id);
     }
 
+
+    // PUT endpoint to update existing members
     @PutMapping
     public Member updateMember(@RequestBody Member member){
         return memberService.save(member);
     }
 
+
+    // DELETE endpoint to delete members
     @DeleteMapping
     public void deleteByMember(@RequestBody Member member){
         memberService.delete(member);

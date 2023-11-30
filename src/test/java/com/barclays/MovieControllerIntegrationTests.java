@@ -2,6 +2,7 @@ package com.barclays;
 
 
 import com.barclays.controller.MovieController;
+import com.barclays.model.Member;
 import com.barclays.model.Movie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class MovieControllerIntegrationTests {
     @Test
     void testGetAllMovies() {
         List<Movie> movies = movieController.getAllMovies("", "");
-        assertEquals(8, movies.size());
+        assertEquals(9, movies.size());
     }
 
     @Test
@@ -75,10 +76,23 @@ public class MovieControllerIntegrationTests {
     }
 
     @Test
+    void testMovieConstructorWithTitle() {
+        Movie movie = new Movie("Spiderman");
+        assertEquals("Spiderman", movie.getTitle());
+    }
+
+    @Test
     void testGetMovie2AssertByDirector() {
         Movie movie = movieController.getMovie(2);
         assertEquals("Titanic", movie.getTitle());
     }
 
+    @Test
+    void testMovieAllArgsConstructor() {
+
+        Member member = new Member();
+        Movie movie = new Movie(3L, "King Kong", "", "", "", 0, "", 0.0, member);
+        assertEquals("King Kong", movie.getTitle());
+    }
 
 }

@@ -1,8 +1,10 @@
 package com.barclays.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -11,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class Member {
 
     @Id
@@ -27,13 +30,20 @@ public class Member {
 
     private String emailAddress;
 
-    public Member(String name) {
+    public Member(String name, String emailAddress) {
         this.name = name;
+        this.emailAddress = emailAddress;
+        List<Movie> movies = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
     }
 
-    @OneToMany(mappedBy = "member")
+    @JsonManagedReference
+    @JoinColumn(name = "member_id")
+    @OneToMany
     private List<Book> books;
 
-    @OneToMany(mappedBy = "member")
+    @JsonManagedReference
+    @JoinColumn(name = "member_id")
+    @OneToMany
     private List<Movie> movies;
 }

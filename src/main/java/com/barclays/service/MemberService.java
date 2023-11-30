@@ -27,5 +27,6 @@ public interface MemberService {
 
    Member save(Member member);
 
+   List<Member> findAllMembersWithMovies();
 
 }

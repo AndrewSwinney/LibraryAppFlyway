@@ -41,7 +41,7 @@ public class BookTestsWithMockHttpRequests {
     @Test
     void testGettingAllBooks() throws Exception {
 
-        int expectedLength = 5;
+        int expectedLength = 8;
 
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/books")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ public class BookTestsWithMockHttpRequests {
     @Test
     void testGettingBookUsingFilter() throws Exception {
 
-        int expectedLength = 2;
+        int expectedLength = 1;
 
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/books?filter=1984")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -140,7 +140,7 @@ public class BookTestsWithMockHttpRequests {
 
 
         Book book = new Book();
-        book.setId(1);
+        book.setId(1L);
         book.setTitle("War and Peace");
 
 

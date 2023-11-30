@@ -1,6 +1,7 @@
 package com.barclays.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +40,9 @@ public class Book {
         this.title = title;
     }
 
-    @ManyToOne
+
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 

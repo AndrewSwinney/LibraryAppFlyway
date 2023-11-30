@@ -1,6 +1,5 @@
 package com.barclays.repository;
 
-import com.barclays.model.Book;
 import com.barclays.model.Member;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,7 +14,14 @@ public interface MemberRepository extends CrudRepository<Member, Long> {
 
     List<Member> findByEmailAddressContains(String emailAddress);
 
+
+    // Query to select all members with books
     @Query("SELECT m FROM Member m JOIN FETCH m.books")
     List<Member> findAllMembersWithBooks();
+
+
+    // Query to select all members with movies
+    @Query("SELECT m FROM Member m JOIN FETCH m.movies")
+    List<Member> findAllMembersWithMovies();
 
 }

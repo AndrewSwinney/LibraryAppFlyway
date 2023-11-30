@@ -1,8 +1,8 @@
 package com.barclays;
 
 
-import com.barclays.controller.BookController;
-import com.barclays.model.Book;
+import com.barclays.controller.MemberController;
+import com.barclays.model.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,36 +15,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MemberControllerIntegrationTests {
 
     @Autowired
-    BookController bookController;
+    MemberController memberController;
 
     @Test
-    public void testGetAllBooks() {
-        List<Book> books = bookController.getAllBooks("", "", "");
-        assertEquals(5, books.size());
+    public void testGetAllMembers() {
+        List<Member> members = memberController.getAllMembers("", "");
+        assertEquals(17, members.size());
     }
 
     @Test
-    public void testGetBook1() {
-        Book book = bookController.getBook(1);
-        assertEquals("Remains of The Day", book.getTitle());
+    public void testGetMember1() {
+        Member member = memberController.getMember(37);
+        assertEquals("Andrew", member.getName());
     }
 
     @Test
-    void testFilterBookByGenre() {
-        List<Book> books = bookController.getAllBooks("", "", "Romance");
-        assertEquals(1, books.size());
+    void testFilterMemberByEmail() {
+        List<Member> members = memberController.getAllMembers("", "andrews@email.com");
+        assertEquals(1, members.size());
     }
 
     @Test
-    void testFilterBookByTitle() {
-        List<Book> books = bookController.getAllBooks("Remains", "", "");
-        System.out.println(books.size());
-        String actualTitle = "";
-
-        for (Book book : books) {
-
-            actualTitle = book.getTitle();
-        }
-        assertEquals("Remains of The Day", actualTitle);
+    public void allArgsConstructor() {
+        Member member = new Member("Billy", "");
+        assertEquals("Billy", member.getName());
     }
+
 }
