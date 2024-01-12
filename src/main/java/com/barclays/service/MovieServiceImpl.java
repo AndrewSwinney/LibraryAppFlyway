@@ -4,7 +4,6 @@ import com.barclays.model.Movie;
 import com.barclays.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie findByMovieId(long id) {
-        Optional<Movie> movies = movieRepository.findById((long) id);
+        Optional<Movie> movies = movieRepository.findById(id);
         return movies.orElseGet(() -> new Movie("Default Member: Nothing found"));
     }
 

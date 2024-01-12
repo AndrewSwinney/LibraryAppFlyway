@@ -69,7 +69,7 @@ class MemberTestsWithMockHttpRequests {
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members?filter=Andrew")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .andExpect(MockMvcResultMatchers.status().isOk());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
@@ -91,7 +91,7 @@ class MemberTestsWithMockHttpRequests {
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members?emailAddress=andrews@email.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .andExpect(MockMvcResultMatchers.status().isOk());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
@@ -112,7 +112,7 @@ class MemberTestsWithMockHttpRequests {
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/members/37")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .andExpect(MockMvcResultMatchers.status().isOk());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
@@ -145,7 +145,7 @@ class MemberTestsWithMockHttpRequests {
                         .content(mapper.writeValueAsString(member))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                        .andExpect(MockMvcResultMatchers.status().isCreated());
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();

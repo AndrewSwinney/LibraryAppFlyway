@@ -7,31 +7,26 @@ import com.barclays.model.Movie;
 import com.barclays.repository.BookRepository;
 import com.barclays.repository.MemberRepository;
 import com.barclays.repository.MovieRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Service
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
+
     private MemberRepository memberRepository;
 
-    @Autowired
+
     private BookRepository bookRepository;
 
-    @Autowired
+
     private MovieRepository movieRepository;
 
-    @Autowired
-    private BookService bookService;
 
     @Override
     public Member createMember(Member member)

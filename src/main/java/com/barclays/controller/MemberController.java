@@ -72,7 +72,7 @@ public class MemberController {
 
     // PUT endpoint to assign a book to a member
     @PutMapping("/{memberId}/books/{bookId}")
-    public ResponseEntity assignBookToMember(@PathVariable Long memberId, @PathVariable Long bookId) {
+    public ResponseEntity<String> assignBookToMember(@PathVariable Long memberId, @PathVariable Long bookId) {
         try {
             memberService.assignBookToMember(memberId, bookId);
             return ResponseEntity.ok("Book assigned to member successfully");
@@ -83,7 +83,7 @@ public class MemberController {
 
     // PUT endpoint to assign a movie to a member
     @PutMapping("/{memberId}/movies/{movieId}")
-    public ResponseEntity assignMovieToMember(@PathVariable Long memberId, @PathVariable Long movieId) {
+    public ResponseEntity<String> assignMovieToMember(@PathVariable Long memberId, @PathVariable Long movieId) {
         try {
             memberService.assignMovieToMember(memberId, movieId);
             return ResponseEntity.ok("Movie assigned to member successfully");
