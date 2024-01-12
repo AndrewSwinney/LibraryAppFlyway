@@ -3,30 +3,30 @@ package com.barclays.service;
 
 import com.barclays.model.Book;
 import com.barclays.model.Member;
+import com.barclays.model.Movie;
 import com.barclays.repository.BookRepository;
 import com.barclays.repository.MemberRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.barclays.repository.MovieRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Service
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
+
     private MemberRepository memberRepository;
 
-    @Autowired
+
     private BookRepository bookRepository;
 
-    @Autowired
-    private BookService bookService;
+
+    private MovieRepository movieRepository;
+
 
     @Override
     public Member createMember(Member member)
@@ -75,6 +75,28 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> findAllMembersWithMovies() {
         return memberRepository.findAllMembersWithMovies();
+    }
+
+    @Override
+    public void assignBookToMember(Long memberId, Long bookId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        book.setMember(member);
+        bookRepository.save(book);
+    }
+
+    @Override
+    public void assignMovieToMember(Long memberId, Long movieId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
+
+        movie.setMember(member);
+        movieRepository.save(movie);
     }
 
 }

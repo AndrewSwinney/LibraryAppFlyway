@@ -70,6 +70,29 @@ public class MemberController {
     }
 
 
+    // PUT endpoint to assign a book to a member
+    @PutMapping("/{memberId}/books/{bookId}")
+    public ResponseEntity<String> assignBookToMember(@PathVariable Long memberId, @PathVariable Long bookId) {
+        try {
+            memberService.assignBookToMember(memberId, bookId);
+            return ResponseEntity.ok("Book assigned to member successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    // PUT endpoint to assign a movie to a member
+    @PutMapping("/{memberId}/movies/{movieId}")
+    public ResponseEntity<String> assignMovieToMember(@PathVariable Long memberId, @PathVariable Long movieId) {
+        try {
+            memberService.assignMovieToMember(memberId, movieId);
+            return ResponseEntity.ok("Movie assigned to member successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+
     // PUT endpoint to update existing members
     @PutMapping
     public Member updateMember(@RequestBody Member member){
